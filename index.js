@@ -32,12 +32,26 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
+    await client.connect();
 
 
+   const parcelCollection = client.db("zap_shift").collection("parcels")
 
 
+   // parcel get api
+   app.get("/allParcels", async(req, res) => {
+    const result = await parcelCollection.find().toArray()
+    res.send(result)
 
+
+   })
+
+    // parcel post api
+    app.post("/parcels", async(req, res) => {
+        const newParcel = req.body
+        const result = await parcelCollection.insertOne(newParcel)
+        res.send(result)
+    })
 
 
 
@@ -74,7 +88,7 @@ async function run() {
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
