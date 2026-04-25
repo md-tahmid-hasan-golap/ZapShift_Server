@@ -2,6 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const e = require('cors');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -39,8 +40,15 @@ async function run() {
 
 
    // parcel get api
-   app.get("/allParcels", async(req, res) => {
-    const result = await parcelCollection.find().toArray()
+   app.get("/Parcels", async(req, res) => {
+    const queary = {}
+    const {email} = req.query
+    if(email){
+        queary.senderEmail = email
+
+    }
+    const cursor = parcelCollection.find(queary)
+    const result = await cursor.toArray()
     res.send(result)
 
 
