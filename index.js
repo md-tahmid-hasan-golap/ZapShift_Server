@@ -40,15 +40,10 @@ async function run() {
 
 
    // parcel get api
-   app.get("/Parcels", async(req, res) => {
-    const queary = {}
-    const {email} = req.query
-    if(email){
-        queary.senderEmail = email
-
-    }
-    const cursor = parcelCollection.find(queary)
-    const result = await cursor.toArray()
+   app.get("/Parcels/:email", async(req, res) => {
+    const email = req.params.email
+    const query =  {senderEmail: email}
+    const result = await parcelCollection.find(query).toArray()
     res.send(result)
 
 
